@@ -5,27 +5,12 @@ import styles from "./page.module.css";
 import { html } from "@codemirror/lang-html";
 import ReactCodeMirror from "@uiw/react-codemirror";
 import { Alert, Snackbar, SnackbarCloseReason, TextField } from "@mui/material";
-
-//#region --- Interfaces ----
-interface packageDeliveryInterface {
-  template: string;
-  destinatario: string;
-  assunto: string;
-}
-
-interface ErrorInterface {
-  destinyError: boolean | undefined;
-  helperDestiny: string;
-  subjectError: boolean | undefined;
-  helperSubject: string;
-}
-
-interface SnackBarInterFace {
-  openSnackBar: boolean;
-  severity?: "error" | "info" | "success" | "warning";
-  msg: string;
-}
-//#endregion
+import {
+  ErrorInterface,
+  PackageDeliveryInterface,
+  SnackBarInterFace,
+} from "./interfaces/interfaces";
+import { POST } from "./api/send/route";
 
 const initialHtmlTemplate = `<!-- Header Table -->
 <table width="600" align="center" border="1" cellpadding="0" cellspacing="0">
@@ -61,7 +46,7 @@ export default function Home() {
   });
 
   const [packageDelivery, setPackageDelivery] =
-    useState<packageDeliveryInterface>({
+    useState<PackageDeliveryInterface>({
       template: initialHtmlTemplate,
       destinatario: "",
       assunto: "",
@@ -168,13 +153,29 @@ export default function Home() {
     }));
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (error.destinyError === false && error.subjectError === false) {
-      //colocar try catch aqui
-      console.log(packageDelivery);
-      handleSnackBar(true, "Email enviado com sucesso");
+      try {
+        const response = await fetch("/api/send", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(packageDelivery),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Erro desconhecido");
+        }
+
+        handleSnackBar(true, "Email enviado com sucesso");
+      } catch (error: any) {
+        console.log(typeof error.message);
+        handleSnackBar(false, error.message);
+      }
     } else {
       handleSnackBar(false, "Um ou mais campos estão incorretos");
     }
@@ -182,7 +183,7 @@ export default function Home() {
 
   const handleReset = () => {
     setPackageDelivery({
-      template: initialHtmlTemplate,
+      template: "",
       destinatario: "",
       assunto: "",
     });
