@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 3rem 10rem;
+  padding: 3rem 10%;
   min-height: 100vh;
   color: var(--preto-base);
 }
@@ -12,7 +12,7 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  width: 70%;
+  max-width: 65%;
   padding: 2rem;
   border-radius: 8px;
   background-color: var(--white);
@@ -42,9 +42,14 @@
   font-weight: 600;
   color: var(--white);
   background-color: var(--azul-destaque);
+  transition: transform ease-in-out 0.3s;
 }
 
 .btnSubmit:hover {
+  transform: scale(1.05);
+}
+
+.btnSubmit:active {
   background-color: var(--preto-base);
 }
 
@@ -57,8 +62,22 @@
   font-weight: 600;
   color: var(--white);
   background-color: var(--preto-base);
+  transition: transform ease-in-out 0.3s;
 }
 
 .btnReset:hover {
+  transform: scale(1.05);
+}
+
+.btnReset:active {
   background-color: var(--azul-destaque);
+}
+
+@media only screen and (max-width: 1024px) {
+  .main {
+    padding: 3rem 0.5rem;
+  }
+  .section {
+    max-width: 100%;
+  }
 }
