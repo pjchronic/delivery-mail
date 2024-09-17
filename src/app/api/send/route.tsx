@@ -2,8 +2,7 @@ import { PackageDeliveryInterface } from "@/app/interfaces/interfaces";
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 import TemplateConvert from "@/app/components/TemplateConvert";
-import { render } from "@react-email/components";
-import { stringify } from "querystring";
+
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -11,7 +10,6 @@ export async function POST(request: Request) {
   const packageDelivery: PackageDeliveryInterface = await request.json();
   const to: string[] = packageDelivery.destinatario.split(";");
 
-// Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: object.  
 
   const template = <TemplateConvert htmlText={packageDelivery.template}/>;
 
