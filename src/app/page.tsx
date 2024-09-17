@@ -10,7 +10,6 @@ import {
   PackageDeliveryInterface,
   SnackBarInterFace,
 } from "./interfaces/interfaces";
-import { POST } from "./api/send/route";
 
 const initialHtmlTemplate = `<!-- Header Table -->
 <table width="600" align="center" border="1" cellpadding="0" cellspacing="0">
@@ -173,7 +172,6 @@ export default function Home() {
 
         handleSnackBar(true, "Email enviado com sucesso");
       } catch (error: any) {
-        console.log(typeof error.message);
         handleSnackBar(false, error.message);
       }
     } else {
